@@ -14,7 +14,7 @@ steps:
     command: 'pull'
     artifactoryService: 'newConnection'
     sourceRepo: 'prova2'
-    imageName: 'a0muixhnkluno.jfrog.io/artifactory/'
+    imageName: 'https://a0muixhnkluno.jfrog.io/artifactory/'
 - task: Docker@2
   inputs:
     containerRegistry: 'fedeRegistry'
