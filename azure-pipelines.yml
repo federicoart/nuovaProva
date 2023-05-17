@@ -15,6 +15,8 @@ steps:
     artifactoryService: 'newConnection'
     sourceRepo: 'prova2'
     imageName: 'https://a0muixhnkluno.jfrog.io/artifactory/prova2/'
+    username: fede
+    password: ;+i5}SAf^+x3F;*
 - task: Docker@2
   inputs:
     containerRegistry: 'fedeRegistry'
@@ -31,14 +33,18 @@ steps:
     collectBuildInfo: true
     buildName: '$(Build.DefinitionName)'
     buildNumber: '$(Build.BuildNumber)'
+    username: fede
+    password: ;+i5}SAf^+x3F;*
 - task: ArtifactoryPublishBuildInfo@1
   inputs:
     artifactoryService: 'newConnection'
     buildName: '$(Build.DefinitionName)'
     buildNumber: '$(Build.BuildNumber)'
+    username: fede
+    password: ;+i5}SAf^+x3F;*
 - task: ArtifactoryXrayScan@1
   inputs:
-        artifactoryService: 'newConnection'
-        buildName: '$(Build.DefinitionName)'
-        buildNumber: '$(Build.BuildNumber)'
-        allowFailBuild: true
+    artifactoryService: 'newConnection'
+    buildName: '$(Build.DefinitionName)'
+    buildNumber: '$(Build.BuildNumber)'
+    allowFailBuild: true
