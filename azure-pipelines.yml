@@ -9,39 +9,39 @@ trigger:
 pool: 'fede2WSL'
 
 steps:
-- task: ArtifactoryDocker@1
-  inputs:
-    command: 'pull'
-    artifactoryService: 'newConnection'
-    sourceRepo: 'prova2'
-    imageName: 'latest'
-   
-- task: Docker@2
-  inputs:
-    containerRegistry: 'fedeRegistry'
-    repository: 'https://a0muixhnkluno.jfrog.io/prova2/nginx'
-    command: 'build'
-    Dockerfile: 'prova2/nginx/Dockerfile'
-    tags: 'latest'
-- task: ArtifactoryDocker@1
-  inputs:
-    command: 'push'
-    artifactoryService: 'newConnection'
-    targetRepo: 'prova2'
-    imageName: 'https://a0muixhnkluno.jfrog.io/artifactory/prova2/'
-    collectBuildInfo: true
-    buildName: '$(Build.DefinitionName)'
-    buildNumber: '$(Build.BuildNumber)'
+  - task: ArtifactoryDocker@1
+    inputs:
+      command: 'pull'
+      artifactoryService: 'newConnection'
+      sourceRepo: 'prova2'
+      imageName: 'https://a0muixhnkluno.jfrog.io/prova2:nginx'
 
-- task: ArtifactoryPublishBuildInfo@1
-  inputs:
-    artifactoryService: 'newConnection'
-    buildName: '$(Build.DefinitionName)'
-    buildNumber: '$(Build.BuildNumber)'
+  - task: Docker@2
+    inputs:
+     containerRegistry: 'fedeRegistry'
+     repository: 'https://a0muixhnkluno.jfrog.io/prova2/nginx'
+     command: 'build'
+     Dockerfile: 'prova2/nginx/Dockerfile'
+     tags: 'latest'
+  - task: ArtifactoryDocker@1
+    inputs:
+     command: 'push'
+     artifactoryService: 'newConnection'
+     targetRepo: 'prova2'
+     imageName: 'https://a0muixhnkluno.jfrog.io/artifactory/prova2/'
+     collectBuildInfo: true
+     buildName: '$(Build.DefinitionName)'
+     buildNumber: '$(Build.BuildNumber)'
 
-- task: ArtifactoryXrayScan@1
-  inputs:
-    artifactoryService: 'newConnection'
-    buildName: '$(Build.DefinitionName)'
-    buildNumber: '$(Build.BuildNumber)'
-    allowFailBuild: true
+  - task: ArtifactoryPublishBuildInfo@1
+    inputs:
+     artifactoryService: 'newConnection'
+     buildName: '$(Build.DefinitionName)'
+     buildNumber: '$(Build.BuildNumber)'
+
+  - task: ArtifactoryXrayScan@1
+    inputs:
+     artifactoryService: 'newConnection'
+     buildName: '$(Build.DefinitionName)'
+     buildNumber: '$(Build.BuildNumber)'
+     allowFailBuild: true
