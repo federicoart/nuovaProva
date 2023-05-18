@@ -1,48 +1,83 @@
 
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+parameters:
+  - name: sourceRepo
+    displayName: Source Repository
+    type: string
+    default: 'prova2'
+  - name: containerRegistry
+    displayName: Container Registry
+    type: string
+    default: 'fedeRegistry'
+  - name: dockerfileLocation
+    displayName: Dockerfile Location
+    type: string
+    default: 'prova2/nginx/Dockerfile'
+  - name: targetRepo
+    displayName: Target Repository
+    type: string
+    default: 'prova2'
 
-trigger:
-- main
+variables:
+  - name: sourceRepo
+    value: ${{ parameters.sourceRepo }}
+  - name: containerRegistry
+    value: ${{ parameters.containerRegistry }}
+  - name: dockerfileLocation
+    value: ${{ parameters.dockerfileLocation }}
+  - name: targetRepo
+    value: ${{ parameters.targetRepo }}
+  - name: imageName
+    value: 'https://a0muixhnkluno.jfrog.io/artifactory/${{ variables.sourceRepo }}/'
+  - name: buildName
+    value: '$(Build.DefinitionName)'
+  - name: buildNumber
+    value: '$(Build.BuildNumber)'
 
-pool: 'fede2WSL'
+jobs:
+- job: ParallelJobs
+  displayName: Parallel Jobs
+  pool: 'fede2WSL'
 
-steps:
-
-
-
+  steps:
   - task: ArtifactoryDocker@1
+    displayName: Pull Container
     inputs:
       command: 'pull'
       artifactoryService: 'newConnection'
-      sourceRepo: 'prova2'
-      imageName: 'https://a0muixhnkluno.jfrog.io/artifactory/prova2/nginx'
-  - task: ArtifactoryDocker@1
-    inputs:
-     command: 'push'
-     artifactoryService: 'newConnection'
-     targetRepo: 'prova2'
-     imageName: 'https://a0muixhnkluno.jfrog.io/artifactory/prova2/'
+      sourceRepo: ${{ variables.sourceRepo }}
+      imageName: ${{ variables.imageName }}
 
   - task: Docker@2
+    displayName: Build Container
     inputs:
-     containerRegistry: 'fedeRegistry'
-     repository: 'https://a0muixhnkluno.jfrog.io/prova2/nginx'
-     command: 'build'
-     Dockerfile: 'prova2/nginx/Dockerfile'
-     tags: 'latest'
+      containerRegistry: ${{ variables.containerRegistry }}
+      repository: ${{ variables.sourceRepo }}
+      command: 'build'
+      Dockerfile: ${{ variables.dockerfileLocation }}
+      tags: 'latest'
+
+  - task: ArtifactoryDocker@1
+    displayName: Push Container
+    inputs:
+      command: 'push'
+      artifactoryService: 'newConnection'
+      targetRepo: ${{ variables.targetRepo }}
+      imageName: ${{ variables.imageName }}
+      collectBuildInfo: true
+      buildName: ${{ variables.buildName }}
+      buildNumber: ${{ variables.buildNumber }}
 
   - task: ArtifactoryPublishBuildInfo@1
+    displayName: Publish Build Info
     inputs:
-     artifactoryService: 'newConnection'
-     buildName: '$(Build.DefinitionName)'
-     buildNumber: '$(Build.BuildNumber)'
+      artifactoryService: 'newConnection'
+      buildName: ${{ variables.buildName }}
+      buildNumber: ${{ variables.buildNumber }}
 
   - task: ArtifactoryXrayScan@1
+    displayName: Xray Scan
     inputs:
-     artifactoryService: 'newConnection'
-     buildName: '$(Build.DefinitionName)'
-     buildNumber: '$(Build.BuildNumber)'
-     allowFailBuild: true
+      artifactoryService: 'newConnection'
+      buildName: ${{ variables.buildName }}
+      buildNumber: ${{ variables.buildNumber }}
+      allowFailBuild: true
