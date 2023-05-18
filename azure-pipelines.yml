@@ -15,7 +15,7 @@ steps:
       command: 'pull'
       artifactoryService: 'newConnection'
       sourceRepo: 'prova2'
-      imageName: 'https://a0muixhnkluno.jfrog.io/prova2:nginx'
+      imageName: 'https://a0muixhnkluno.jfrog.io/prova2/nginx'
 
   - task: Docker@2
     inputs:
