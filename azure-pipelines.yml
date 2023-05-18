@@ -10,7 +10,7 @@ parameters:
   - name: sourceRepo
     displayName: Source Repository
     type: string
-    default: 'nginx'
+    default: 'prova2'
   - name: containerRegistry
     displayName: Container Registry
     type: string
@@ -22,7 +22,7 @@ parameters:
   - name: targetRepo
     displayName: Target Repository
     type: string
-    default: 'prova2'
+    default: 'nginx'
 
 variables:
   - name: sourceRepo
