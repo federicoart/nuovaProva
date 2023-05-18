@@ -14,7 +14,7 @@ steps:
     command: 'pull'
     artifactoryService: 'newConnection'
     sourceRepo: 'prova2'
-    imageName: 'https://diocane.jfrog.io/artifactory/prova2/'
+    imageName: 'prova2'
     username: fede
     password: ;+i5}SAf^+x3F;*
 - task: Docker@2
