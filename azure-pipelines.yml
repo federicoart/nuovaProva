@@ -14,13 +14,13 @@ steps:
     command: 'pull'
     artifactoryService: 'newConnection'
     sourceRepo: 'prova2'
-    imageName: 'https://a0muixhnkluno/ui/admin/repositories/local/prova2/'
+    imageName: 'latest'
     username: fede
     password: ;+i5}SAf^+x3F;*
 - task: Docker@2
   inputs:
     containerRegistry: 'fedeRegistry'
-    repository: 'https://a0muixhnkluno.jfrog.io/artifactory/prova2/'
+    repository: 'https://a0muixhnkluno.jfrog.io/prova2/nginx'
     command: 'build'
     Dockerfile: 'prova2/nginx/Dockerfile'
     tags: 'latest'
