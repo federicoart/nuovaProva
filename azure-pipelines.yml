@@ -10,12 +10,6 @@ trigger:
 pool: 'fede2WSL'
 
 steps:
-  - task: ArtifactoryDocker@1
-    inputs:
-      command: 'pull'
-      artifactoryService: 'newConnection'
-      sourceRepo: 'prova2'
-      imageName: 'https://a0muixhnkluno.jfrog.io/prova2/nginx'
 
   - task: Docker@2
     inputs:
@@ -24,6 +18,13 @@ steps:
      command: 'build'
      Dockerfile: 'prova2/nginx/Dockerfile'
      tags: 'latest'
+
+  - task: ArtifactoryDocker@1
+    inputs:
+      command: 'pull'
+      artifactoryService: 'newConnection'
+      sourceRepo: 'prova2'
+      imageName: 'https://a0muixhnkluno.jfrog.io/prova2/nginx'
   - task: ArtifactoryDocker@1
     inputs:
      command: 'push'
