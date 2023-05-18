@@ -11,13 +11,7 @@ pool: 'fede2WSL'
 
 steps:
 
-  - task: Docker@2
-    inputs:
-     containerRegistry: 'fedeRegistry'
-     repository: 'https://a0muixhnkluno.jfrog.io/prova2/nginx'
-     command: 'build'
-     Dockerfile: 'prova2/nginx/Dockerfile'
-     tags: 'latest'
+
 
   - task: ArtifactoryDocker@1
     inputs:
@@ -31,9 +25,14 @@ steps:
      artifactoryService: 'newConnection'
      targetRepo: 'prova2'
      imageName: 'https://a0muixhnkluno.jfrog.io/artifactory/prova2/'
-     collectBuildInfo: true
-     buildName: '$(Build.DefinitionName)'
-     buildNumber: '$(Build.BuildNumber)'
+
+  - task: Docker@2
+    inputs:
+     containerRegistry: 'fedeRegistry'
+     repository: 'https://a0muixhnkluno.jfrog.io/prova2/nginx'
+     command: 'build'
+     Dockerfile: 'prova2/nginx/Dockerfile'
+     tags: 'latest'
 
   - task: ArtifactoryPublishBuildInfo@1
     inputs:
